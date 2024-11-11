@@ -4,8 +4,12 @@ console.log("jkjkjk");
 const User = require("./db/User");
 const app = express();
 
-app.post("/register", (req, res) => {
-  res.send("API WORKS!@!!!");
+app.use(express.json());
+
+app.post("/register", async (req, res) => {
+  let user = new User(req.body);
+  let result = await user.save();
+  res.send(result);
 });
 
 app.listen(5000);
