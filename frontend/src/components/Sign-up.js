@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledBox } from "../styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [signUpData, setsignUpData] = useState({
     name: "",
     email: "",
@@ -17,7 +20,18 @@ export default function SignUp() {
   };
 
   const onSubmit = () => {
-    console.log(signUpData);
+    axios
+      .post("http://localhost:5000/register", signUpData)
+      .then(function (response) {
+        if (response?.status === 200) {
+          console.log(response);
+          localStorage.setItem("user", JSON.stringify(response?.data));
+          navigate("/");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
