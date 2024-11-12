@@ -7,22 +7,28 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-  },
-  {
-    path: "/add",
-    element: <Layout />,
-  },
-  {
-    path: "/update",
-    element: <Layout />,
-  },
-  {
-    path: "/logout",
-    element: <Layout />,
-  },
-  {
-    path: "/profile",
-    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <>products</>,
+      },
+      {
+        path: "/add",
+        element: <>add</>,
+      },
+      {
+        path: "/update",
+        element: <>update</>,
+      },
+      {
+        path: "/logout",
+        element: <>logout</>,
+      },
+      {
+        path: "/profile",
+        element: <>profile</>,
+      },
+    ],
   },
   {
     path: "/sign-up",

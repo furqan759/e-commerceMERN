@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledBox } from "../styles";
 import axios from "axios";
@@ -6,11 +6,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const auth = localStorage.getItem("user");
   const [signUpData, setsignUpData] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (auth) {
+      navigate("/");
+    }
+  }, []);
 
   const onChangeHandler = (e) => {
     setsignUpData({
