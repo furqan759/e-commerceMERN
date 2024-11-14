@@ -1,5 +1,8 @@
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Logo } from "../assets/img";
+import { StyledLink } from "../styles/navbar";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -7,41 +10,48 @@ export default function Navbar() {
 
   const logout = () => {
     localStorage.removeItem("user");
-    navigate("/sign-up");
+    navigate("/login");
   };
   return (
-    <div className="nav-heading">
-      <ul className="nav-ul">
-        <li>
-          <Link to={"/"}>Products</Link>
-        </li>
-        <li>
-          <Link to={"/add"}>Add Products</Link>
-        </li>
-        <li>
-          <Link to={"/update"}>Update Products</Link>
-        </li>
-
-        <li>
-          <Link to={"/profile"}>Profile</Link>
-        </li>
+    <Box sx={{ backgroundColor: "green" }}>
+      <Grid container alignItems={"center"} spacing={2}>
         {auth ? (
-          <li>
-            <Link onClick={() => logout()} to={"/sign-up"}>
-              Logout
-            </Link>
-          </li>
+          <>
+            <Grid item>
+              <img src={Logo} height={"52rem"} width={"52rem"} alt="logo" />
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/"}>Products</StyledLink>
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/add"}>Add Products</StyledLink>
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/update"}>Update Products</StyledLink>
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/profile"}>Profile</StyledLink>
+            </Grid>
+            <Grid item>
+              <StyledLink onClick={() => logout()} to={"/login"}>
+                Logout
+              </StyledLink>
+            </Grid>
+          </>
         ) : (
           <>
-            <li>
-              <Link to={"/login"}>Login</Link>
-            </li>
-            <li>
-              <Link to={"/sign-up"}>Sign Up</Link>
-            </li>
+            <Grid item>
+              <img src={Logo} height={"52rem"} width={"52rem"} alt="logo" />
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/login"}>Login</StyledLink>
+            </Grid>
+            <Grid item>
+              <StyledLink to={"/sign-up"}>Sign Up</StyledLink>
+            </Grid>
           </>
         )}
-      </ul>
-    </div>
+      </Grid>
+    </Box>
   );
 }
