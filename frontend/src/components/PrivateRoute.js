@@ -1,6 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Layout } from "./Layout";
 
 export const PrivateRoute = () => {
-  return <Outlet />;
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { StyledBox } from "../styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -70,9 +70,20 @@ export default function SignUp() {
         value={signUpData.password}
         onChange={(e) => onChangeHandler(e)}
       />
-      <Button variant="contained" onClick={() => onSubmit()}>
-        Register
-      </Button>
+      <Box
+        display={"flex"}
+        justifyContent={"center"}
+        flexDirection={"column"}
+        alignItems={"center"}
+      >
+        <Button variant="contained" onClick={() => onSubmit()}>
+          Register
+        </Button>
+        <Typography sx={{ my: 1 }}>OR</Typography>
+        <Button variant="contained" onClick={() => navigate("/login")}>
+          Login
+        </Button>
+      </Box>
     </StyledBox>
   );
 }
