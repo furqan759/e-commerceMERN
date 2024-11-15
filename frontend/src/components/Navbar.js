@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Divider, Grid2 } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../assets/img";
@@ -13,45 +13,46 @@ export default function Navbar() {
     navigate("/login");
   };
   return (
-    <Box sx={{ backgroundColor: "green" }}>
-      <Grid container alignItems={"center"} spacing={2}>
+    <Box sx={{ backgroundColor: "gray" }}>
+      <Grid2 container alignItems={"center"} spacing={2}>
         {auth ? (
           <>
-            <Grid item>
+            <Grid2 item>
               <img src={Logo} height={"52rem"} width={"52rem"} alt="logo" />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/"}>Products</StyledLink>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/add"}>Add Products</StyledLink>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/update"}>Update Products</StyledLink>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/profile"}>Profile</StyledLink>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink onClick={() => logout()} to={"/login"}>
                 Logout
               </StyledLink>
-            </Grid>
+            </Grid2>
           </>
         ) : (
           <>
-            <Grid item>
+            <Grid2 item>
               <img src={Logo} height={"52rem"} width={"52rem"} alt="logo" />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/login"}>Login</StyledLink>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2 item>
               <StyledLink to={"/sign-up"}>Sign Up</StyledLink>
-            </Grid>
+            </Grid2>
           </>
         )}
-      </Grid>
+      </Grid2>
+      <Divider />
     </Box>
   );
 }
