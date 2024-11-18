@@ -36,4 +36,17 @@ app.post("/add-product", async (req, res) => {
   res.send(result);
 });
 
+app.get("/products", async (req, res) => {
+  if (req) {
+    let products = await Product.find();
+    if (products) {
+      res.send(products);
+    } else {
+      res.send({ result: "No Products Found" });
+    }
+  } else {
+    res.send({ result: "Server Error!" });
+  }
+});
+
 app.listen(5000);

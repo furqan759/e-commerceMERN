@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import SignUp from "./components/Sign-up";
-import { Layout } from "./components/Layout";
 import { Login } from "./components/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AddProduct } from "./components/AddProduct";
+import { Products } from "./components/Products";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <>products</>,
+        element: <Products />,
       },
       {
         path: "/add",
