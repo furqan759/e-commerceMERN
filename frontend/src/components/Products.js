@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 export const Products = () => {
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   const [products, setProducts] = useState([]);
-
-  console.log(products);
 
   useEffect(() => {
     getProducts();
@@ -19,6 +18,21 @@ export const Products = () => {
       .then(function (response) {
         if (response?.status === 200) {
           setProducts(response.data);
+        } else {
+          alert("API not working");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const deleteProduct = (id) => {
+    axios
+      .delete(`http://localhost:5000/product/${id}`)
+      .then(function (response) {
+        if (response?.status === 200) {
+          getProducts();
         } else {
           alert("API not working");
         }
@@ -52,6 +66,20 @@ export const Products = () => {
       headerName: "Company",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
+      width: 160,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (row) => {
+        console.log(row);
+        return (
+          <IconButton onClick={() => deleteProduct(row.row?._id)}>
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
       width: 160,
     },
   ];
