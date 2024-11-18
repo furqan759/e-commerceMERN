@@ -49,4 +49,13 @@ app.get("/products", async (req, res) => {
   }
 });
 
+app.delete("/product/:id", async (req, res) => {
+  let result = await Product.deleteOne({ id: res?.params?.id });
+  if (result) {
+    res.send(result);
+  } else {
+    res.send({ result: "Deletion Failed" });
+  }
+});
+
 app.listen(5000);
