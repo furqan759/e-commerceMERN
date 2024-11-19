@@ -9,13 +9,19 @@ import { useNavigate } from "react-router-dom";
 export const Products = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  let user = localStorage.getItem("user");
+  user = JSON.parse(user);
 
   useEffect(() => {
     getProducts();
   }, []);
   const getProducts = () => {
     axios
-      .get("http://localhost:5000/products")
+      .get("http://localhost:5000/products", {
+        headers: {
+          authorization: user?.auth,
+        },
+      })
       .then(function (response) {
         if (response?.status === 200) {
           setProducts(response.data);
