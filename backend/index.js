@@ -75,16 +75,23 @@ app.patch("/update-product/:id", async (req, res) => {
   res.send(result);
 });
 
-app.get("/search-product/:key", async (req, res) => {
+app.get("/search-product/:key?", async (req, res) => {
+  // ? used for optional query param
   const searchKey = req.params.key;
-  let result = await Product.find({
-    $or: [
-      { name: { $regex: searchKey, $options: "i" } }, //$options: "i" is for case insensitive values
-      { price: { $regex: searchKey, $options: "i" } },
-      { category: { $regex: searchKey, $options: "i" } },
-      { company: { $regex: searchKey, $options: "i" } },
-    ],
-  });
+  let result;
+  if (!searchKey) {
+    result = await Product.find();
+  } else {
+    result = await Product.find({
+      $or: [
+        { name: { $regex: searchKey, $options: "i" } }, //$options: "i" is for case insensitive values
+        { price: { $regex: searchKey, $options: "i" } },
+        { category: { $regex: searchKey, $options: "i" } },
+        { company: { $regex: searchKey, $options: "i" } },
+      ],
+    });
+  }
+
   res.send(result);
 });
 
