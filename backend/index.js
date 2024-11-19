@@ -50,12 +50,29 @@ app.get("/products", async (req, res) => {
 });
 
 app.delete("/product/:id", async (req, res) => {
-  let result = await Product.deleteOne({ id: res?.params?.id });
+  let result = await Product.deleteOne({ _id: req?.params?.id });
   if (result) {
     res.send(result);
   } else {
     res.send({ result: "Deletion Failed" });
   }
+});
+
+app.get("/product/:id", async (req, res) => {
+  let result = await Product.findOne({ _id: req?.params?.id });
+  if (result) {
+    res.send(result);
+  } else {
+    res.send({ result: "No Items Found" });
+  }
+});
+
+app.patch("/update-product/:id", async (req, res) => {
+  let result = await Product.updateOne(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+  res.send(result);
 });
 
 app.listen(5000);
