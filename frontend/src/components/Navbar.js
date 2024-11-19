@@ -26,9 +26,9 @@ export default function Navbar() {
             <Grid2 item>
               <StyledLink to={"/add"}>Add Products</StyledLink>
             </Grid2>
-            <Grid2 item>
-              <StyledLink to={"/update"}>Update Products</StyledLink>
-            </Grid2>
+            {/* <Grid2 item>
+              <StyledLink to={"/edit-product/:id"}>Update Products</StyledLink>
+            </Grid2> */}
             <Grid2 item>
               <StyledLink to={"/profile"}>Profile</StyledLink>
             </Grid2>

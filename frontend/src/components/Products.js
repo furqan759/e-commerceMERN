@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
-  let user = localStorage.getItem("user");
-  user = JSON.parse(user);
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -75,9 +76,16 @@ export const Products = () => {
       renderCell: (row) => {
         console.log(row);
         return (
-          <IconButton onClick={() => deleteProduct(row.row?._id)}>
-            <DeleteIcon />
-          </IconButton>
+          <>
+            <IconButton
+              onClick={() => navigate(`/edit-product/${row.row?._id}`)}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => deleteProduct(row.row?._id)}>
+              <DeleteIcon />
+            </IconButton>
+          </>
         );
       },
       width: 160,

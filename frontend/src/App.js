@@ -5,6 +5,7 @@ import { Login } from "./components/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AddProduct } from "./components/AddProduct";
 import { Products } from "./components/Products";
+import { UpdateProduct } from "./components/UpdateProduct";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,8 @@ const router = createBrowserRouter([
         element: <AddProduct />,
       },
       {
-        path: "/update",
-        element: <>update</>,
+        path: "/edit-product/:id",
+        element: <UpdateProduct />,
       },
       {
         path: "/logout",
