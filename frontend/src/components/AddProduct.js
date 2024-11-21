@@ -24,10 +24,14 @@ export const AddProduct = () => {
 
   const createProduct = () => {
     axios
-      .post("http://localhost:5000/add-product", {
-        ...productDetails,
-        userId: auth._id,
-      })
+      .post(
+        "http://localhost:5000/add-product",
+        {
+          ...productDetails,
+          userId: auth._id,
+        },
+        { headers: { authorization: auth?.auth } }
+      )
       .then(function (response) {
         if (response?.status === 200) {
           console.log(response);
@@ -36,6 +40,10 @@ export const AddProduct = () => {
       })
       .catch(function (error) {
         console.log(error);
+        if (error?.status === 401) {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
       });
   };
 

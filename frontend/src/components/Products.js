@@ -31,6 +31,10 @@ export const Products = () => {
       })
       .catch(function (error) {
         console.log(error);
+        if (error?.status === 401) {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
       });
   };
 
@@ -46,6 +50,10 @@ export const Products = () => {
       })
       .catch(function (error) {
         console.log(error);
+        if (error?.status === 401) {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
       });
   };
 

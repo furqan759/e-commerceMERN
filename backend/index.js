@@ -11,12 +11,27 @@ const jwtKey = "e-comm";
 app.use(express.json());
 app.use(cors());
 
+const verifyToken = (req, res, next) => {
+  let token = req.headers["authorization"];
+  if (token) {
+    jwt.verify(token, jwtKey, (err, success) => {
+      if (err) {
+        res.status(401).send({ result: "Invalid Token" });
+      } else {
+        next();
+      }
+    });
+  } else {
+    res.status(403).send({ result: "Missing Authorization headers" });
+  }
+};
+
 app.post("/register", async (req, res) => {
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject(); // To remove password in response data
   delete result.password;
-  jwt.sign({ result }, jwtKey, { expiresIn: "1h" }, (err, token) => {
+  jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
     if (err) {
       res.send({ result: "Something went wrong" });
     }
@@ -28,7 +43,7 @@ app.post("/login", async (req, res) => {
   if (req.body.email && req.body.password) {
     let user = await User.findOne(req.body).select("-password"); // remove password in response data
     if (user) {
-      jwt.sign({ user }, jwtKey, { expiresIn: "1h" }, (err, token) => {
+      jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
         if (err) {
           res.send({ result: "Something went wrong" });
         }
@@ -42,13 +57,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/add-product", async (req, res) => {
+app.post("/add-product", verifyToken, async (req, res) => {
   let product = new Product(req.body);
   let result = await product.save();
   res.send(result);
 });
 
-app.get("/products", async (req, res) => {
+app.get("/products", verifyToken, async (req, res) => {
   if (req) {
     let products = await Product.find();
     if (products) {
@@ -61,7 +76,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
-app.delete("/product/:id", async (req, res) => {
+app.delete("/product/:id", verifyToken, async (req, res) => {
   let result = await Product.deleteOne({ _id: req?.params?.id });
   if (result) {
     res.send(result);
@@ -70,7 +85,7 @@ app.delete("/product/:id", async (req, res) => {
   }
 });
 
-app.get("/product/:id", async (req, res) => {
+app.get("/product/:id", verifyToken, async (req, res) => {
   let result = await Product.findOne({ _id: req?.params?.id });
   if (result) {
     res.send(result);
@@ -79,7 +94,7 @@ app.get("/product/:id", async (req, res) => {
   }
 });
 
-app.patch("/update-product/:id", async (req, res) => {
+app.patch("/update-product/:id", verifyToken, async (req, res) => {
   let result = await Product.updateOne(
     { _id: req.params.id },
     { $set: req.body }
@@ -87,7 +102,7 @@ app.patch("/update-product/:id", async (req, res) => {
   res.send(result);
 });
 
-app.get("/search-product/:key?", async (req, res) => {
+app.get("/search-product/:key?", verifyToken, async (req, res) => {
   // ? used for optional query param
   const searchKey = req.params.key;
   let result;
