@@ -1,28 +1,48 @@
 const express = require("express");
+require("dotenv").config();
 const cors = require("cors");
 require("./db/config");
 const User = require("./db/User");
 const Product = require("./db/Product");
 const app = express();
+const admin = require("firebase-admin");
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://e-commerce-4fd3e-default-rtdb.firebaseio.com",
+});
 
 const jwt = require("jsonwebtoken");
-const jwtKey = "e-comm";
 
 app.use(express.json());
 app.use(cors());
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   let token = req.headers["authorization"];
   if (token) {
-    jwt.verify(token, jwtKey, (err, success) => {
-      if (err) {
-        res.status(401).send({ result: "Invalid Token" });
-      } else {
-        next();
-      }
-    });
+    try {
+      jwt.verify(token, process.env.JWTKEY, (err, success) => {
+        if (err) {
+          verifyFirebaseToken(token, next);
+        } else {
+          next();
+        }
+      });
+    } catch (err) {
+      res.status(500).send({ result: "Internal Server Error" });
+    }
   } else {
     res.status(403).send({ result: "Missing Authorization headers" });
+  }
+};
+
+const verifyFirebaseToken = async (token, next) => {
+  try {
+    const decodedFirebaseToken = await admin.auth().verifyIdToken(token);
+    return next();
+  } catch (err) {
+    res.status(500).send({ result: "Internal Server Error" });
   }
 };
 
@@ -31,24 +51,34 @@ app.post("/register", async (req, res) => {
   let result = await user.save();
   result = result.toObject(); // To remove password in response data
   delete result.password;
-  jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
-    if (err) {
-      res.send({ result: "Something went wrong" });
+  jwt.sign(
+    { result },
+    process.env.JWTKEY,
+    { expiresIn: "2h" },
+    (err, token) => {
+      if (err) {
+        res.send({ result: "Something went wrong" });
+      }
+      res.send({ result, auth: token });
     }
-    res.send({ result, auth: token });
-  });
+  );
 });
 
 app.post("/login", async (req, res) => {
   if (req.body.email && req.body.password) {
     let user = await User.findOne(req.body).select("-password"); // remove password in response data
     if (user) {
-      jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
-        if (err) {
-          res.send({ result: "Something went wrong" });
+      jwt.sign(
+        { user },
+        process.env.JWTKEY,
+        { expiresIn: "2h" },
+        (err, token) => {
+          if (err) {
+            res.send({ result: "Something went wrong" });
+          }
+          res.send({ user, auth: token });
         }
-        res.send({ user, auth: token });
-      });
+      );
     } else {
       res.send({ result: "No User Found" });
     }

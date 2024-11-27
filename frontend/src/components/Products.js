@@ -11,6 +11,7 @@ export const Products = () => {
   const [products, setProducts] = useState([]);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
+  console.log({ user });
 
   useEffect(() => {
     getProducts();

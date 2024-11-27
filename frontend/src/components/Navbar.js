@@ -1,15 +1,25 @@
+import React, { useEffect } from "react";
 import { Box, Divider, Grid2 } from "@mui/material";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Logo } from "../assets/img";
 import { StyledLink } from "../styles/navbar";
+import { getAuth } from "firebase/auth";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const auth = localStorage.getItem("user");
 
-  const logout = () => {
+  // useEffect(() => {
+  //   checkAuth();
+  // }, []);
+
+  // const checkAuth = async () => {
+  //   await getAuth();
+  // };
+
+  const logout = async () => {
     localStorage.removeItem("user");
+    await getAuth().signOut();
     navigate("/login");
   };
   return (

@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { StyledBox } from "../styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { SignWithGoogle } from "./SignWithGoogle";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -74,6 +75,9 @@ export const Login = () => {
           Login
         </Button>
         <Typography sx={{ my: 1 }}>OR</Typography>
+        <SignWithGoogle />
+        <Typography sx={{ mt: 3, mb: 1 }}>Don't Have an Account?</Typography>
+
         <Button variant="contained" onClick={() => navigate("/sign-up")}>
           Register
         </Button>

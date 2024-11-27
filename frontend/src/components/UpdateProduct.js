@@ -22,7 +22,11 @@ export const UpdateProduct = () => {
 
   const getProduct = () => {
     axios
-      .get(`http://localhost:5000/product/${params?.id}`)
+      .get(`http://localhost:5000/product/${params?.id}`, {
+        headers: {
+          Authorization: auth?.auth,
+        },
+      })
       .then(function (response) {
         if (response?.status === 200) {
           console.log(response);
@@ -52,9 +56,17 @@ export const UpdateProduct = () => {
 
   const updateProduct = () => {
     axios
-      .patch(`http://localhost:5000/update-product/${params.id}`, {
-        ...productDetails,
-      })
+      .patch(
+        `http://localhost:5000/update-product/${params.id}`,
+        {
+          ...productDetails,
+        },
+        {
+          headers: {
+            Authorization: auth?.auth,
+          },
+        }
+      )
       .then(function (response) {
         if (response?.status === 200) {
           console.log(response);
