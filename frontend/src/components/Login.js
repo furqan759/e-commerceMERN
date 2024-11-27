@@ -30,9 +30,7 @@ export const Login = () => {
     axios
       .post("http://localhost:5000/login", loginData)
       .then(function (response) {
-        console.log(response);
         if (response?.status === 200) {
-          console.log(response);
           localStorage.setItem("user", JSON.stringify(response?.data));
           navigate("/");
         } else {

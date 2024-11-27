@@ -31,7 +31,6 @@ export default function SignUp() {
       .post("http://localhost:5000/register", signUpData)
       .then(function (response) {
         if (response?.status === 200) {
-          console.log(response);
           localStorage.setItem("user", JSON.stringify(response?.data));
           navigate("/");
         }

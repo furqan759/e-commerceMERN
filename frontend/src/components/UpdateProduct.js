@@ -14,7 +14,6 @@ export const UpdateProduct = () => {
     category: "",
     company: "",
   });
-  //   console.log({ productDetails });
 
   useEffect(() => {
     getProduct();

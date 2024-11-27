@@ -13,7 +13,6 @@ export const AddProduct = () => {
     category: "",
     company: "",
   });
-  console.log({ productDetails });
 
   const onChangeHandler = (e) => {
     setProductDetails({
@@ -34,7 +33,6 @@ export const AddProduct = () => {
       )
       .then(function (response) {
         if (response?.status === 200) {
-          console.log(response);
           navigate("/");
         }
       })

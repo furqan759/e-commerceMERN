@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 export const Products = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [loader, setLoader] = useState(true);
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
-  console.log({ user });
 
   useEffect(() => {
     getProducts();
@@ -26,13 +26,15 @@ export const Products = () => {
       .then(function (response) {
         if (response?.status === 200) {
           setProducts(response.data);
+          setLoader(false);
         } else {
-          alert("API not working");
+          setLoader(false);
+          // alert("API not working");
         }
       })
       .catch(function (error) {
-        console.log(error);
         if (error?.status === 401) {
+          setLoader(false);
           localStorage.removeItem("user");
           navigate("/login");
         }
@@ -107,23 +109,29 @@ export const Products = () => {
     },
   ];
   return (
-    <Box sx={{ width: "100%" }}>
-      <DataGrid
-        rows={products}
-        columns={columns}
-        disableColumnMenu
-        getRowId={(row) => row?._id}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+    <>
+      <Typography textAlign={"center"} fontWeight={600} variant="h5">
+        Products
+      </Typography>
+      <Box sx={{ width: "100%", height: "20rem" }}>
+        <DataGrid
+          rows={products}
+          loading={loader}
+          columns={columns}
+          disableColumnMenu
+          getRowId={(row) => row?._id}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
+    </>
   );
 };

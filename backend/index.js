@@ -47,21 +47,25 @@ const verifyFirebaseToken = async (token, next) => {
 };
 
 app.post("/register", async (req, res) => {
-  let user = new User(req.body);
-  let result = await user.save();
-  result = result.toObject(); // To remove password in response data
-  delete result.password;
-  jwt.sign(
-    { result },
-    process.env.JWTKEY,
-    { expiresIn: "2h" },
-    (err, token) => {
-      if (err) {
-        res.send({ result: "Something went wrong" });
+  if (req.body.email && req.body.password && req.body.name) {
+    let user = new User(req.body);
+    let result = await user.save();
+    result = result.toObject(); // To remove password in response data
+    delete result.password;
+    jwt.sign(
+      { result },
+      process.env.JWTKEY,
+      { expiresIn: "2h" },
+      (err, token) => {
+        if (err) {
+          res.status(400).send({ result: "Internal Server Error" });
+        }
+        res.send({ result, auth: token });
       }
-      res.send({ result, auth: token });
-    }
-  );
+    );
+  } else {
+    res.status(422).send({ result: "Missing Field Values" });
+  }
 });
 
 app.post("/login", async (req, res) => {
@@ -83,7 +87,7 @@ app.post("/login", async (req, res) => {
       res.send({ result: "No User Found" });
     }
   } else {
-    res.send({ result: "Please Enter All Fields" });
+    res.status(422).send({ result: "Missing Field Values" });
   }
 });
 
