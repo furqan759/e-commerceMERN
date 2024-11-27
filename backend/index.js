@@ -40,7 +40,11 @@ const verifyToken = async (req, res, next) => {
 const verifyFirebaseToken = async (token, next) => {
   try {
     const decodedFirebaseToken = await admin.auth().verifyIdToken(token);
-    return next();
+    if (decodedFirebaseToken) {
+      return next();
+    } else {
+      res.status(498).send({ result: "Internal Server Error" });
+    }
   } catch (err) {
     res.status(500).send({ result: "Internal Server Error" });
   }
