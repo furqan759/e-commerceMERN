@@ -24,7 +24,7 @@ const verifyToken = async (req, res, next) => {
     try {
       jwt.verify(token, process.env.JWTKEY, (err, success) => {
         if (err) {
-          verifyFirebaseToken(token, next);
+          verifyFirebaseToken(token, next, res);
         } else {
           next();
         }
@@ -37,7 +37,7 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-const verifyFirebaseToken = async (token, next) => {
+const verifyFirebaseToken = async (token, next, res) => {
   try {
     const decodedFirebaseToken = await admin.auth().verifyIdToken(token);
     if (decodedFirebaseToken) {
@@ -52,6 +52,10 @@ const verifyFirebaseToken = async (token, next) => {
 
 app.post("/register", async (req, res) => {
   if (req.body.email && req.body.password && req.body.name) {
+    const userDetails = await User.findOne({ email: req.body.email });
+    if (userDetails) {
+      return res.status(409).send({ result: "Email already registered" });
+    }
     let user = new User(req.body);
     let result = await user.save();
     result = result.toObject(); // To remove password in response data
@@ -101,9 +105,9 @@ app.post("/add-product", verifyToken, async (req, res) => {
   res.send(result);
 });
 
-app.get("/products", verifyToken, async (req, res) => {
+app.post("/products", verifyToken, async (req, res) => {
   if (req) {
-    let products = await Product.find();
+    let products = await Product.find({ userId: req.body?.userId });
     if (products) {
       res.send(products);
     } else {

@@ -18,11 +18,17 @@ export const Products = () => {
   }, []);
   const getProducts = () => {
     axios
-      .get("http://localhost:5000/products", {
-        headers: {
-          authorization: user?.auth,
+      .post(
+        "http://localhost:5000/products",
+        {
+          userId: user?.user._id,
         },
-      })
+        {
+          headers: {
+            authorization: user?.auth,
+          },
+        }
+      )
       .then(function (response) {
         if (response?.status === 200) {
           setProducts(response.data);

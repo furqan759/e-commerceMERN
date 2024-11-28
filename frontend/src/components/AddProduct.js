@@ -27,7 +27,7 @@ export const AddProduct = () => {
         "http://localhost:5000/add-product",
         {
           ...productDetails,
-          userId: auth._id,
+          userId: auth?.user?._id,
         },
         { headers: { authorization: auth?.auth } }
       )
